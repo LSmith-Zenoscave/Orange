@@ -113,6 +113,33 @@ void initialize_idt()
   idt_flush(&idt_ptr);
 }
 
+void initialize_irq()
+{
+  pic_remap(0x20, 0x28);
+	fill_idt_entry(32, 8, _irq0, 0xe, 0);
+	fill_idt_entry(33, 8, _irq1, 0xe, 0);
+	fill_idt_entry(34, 8, _irq2, 0xe, 0);
+	fill_idt_entry(35, 8, _irq3, 0xe, 0);
+	fill_idt_entry(36, 8, _irq4, 0xe, 0);
+	fill_idt_entry(37, 8, _irq5, 0xe, 0);
+	fill_idt_entry(38, 8, _irq6, 0xe, 0);
+	fill_idt_entry(39, 8, _irq7, 0xe, 0);
+	fill_idt_entry(40, 8, _irq8, 0xe, 0);
+	fill_idt_entry(41, 8, _irq9, 0xe, 0);
+	fill_idt_entry(42, 8, _irq10, 0xe, 0);
+	fill_idt_entry(43, 8, _irq11, 0xe, 0);
+	fill_idt_entry(44, 8, _irq12, 0xe, 0);
+	fill_idt_entry(45, 8, _irq13, 0xe, 0);
+	fill_idt_entry(46, 8, _irq14, 0xe, 0);
+	fill_idt_entry(47, 8, _irq15, 0xe, 0);
+
+  for(int i = 0; i < 256; i++)
+  {
+    register_irq_handler((unsigned char) i, default_irq_handler);
+    register_isr_handler((unsigned char) i, default_fault_handler);
+  }
+}
+
 static void fill_idt_entry(int entry, unsigned short selector, void *offset, unsigned char gate, unsigned char priv)
 {
   idt[entry].base_low = (unsigned short)((unsigned int)offset & 0xFFFF);

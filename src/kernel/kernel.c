@@ -14,6 +14,8 @@ void kernel_early(void *mboot, unsigned int magic, unsigned int *ebp)
   initialize_gdt();
   terminal_writestring("[\x1b[32mDONE\x1b[00m]\nIDT   ... ");
   initialize_idt();
+  terminal_writestring("[\x1b[32mDONE\x1b[00m]\nIRQ   ... ");
+  initialize_irq();
   terminal_writestring("[\x1b[32mDONE\x1b[00m]\n");
 }
 
