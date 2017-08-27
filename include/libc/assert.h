@@ -1,3 +1,20 @@
+/* ===========================================================================
+ * Orange 0.1.0
+ *
+ * Please refer to LICENSE for copyright information
+ *
+ *              Orange: A hobby OS designed for studying OS development.
+ *
+ *              LibC: The Orange C Standard Library Implementation
+ *
+ *      File    : assert.h
+ *      Purpose : basic assertion utility
+ *
+ *      Notes   : aborts on failure if DEBUGing is available
+ *      Author  : Luke Smith
+ * ===========================================================================
+ */
+
 #ifndef _ASSERT_H
 #define _ASSERT_H 1
 

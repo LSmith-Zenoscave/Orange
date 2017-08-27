@@ -1,6 +1,6 @@
 /* ===========================================================================
- * Orange 0.0.1
- * 
+ * Orange 0.1.0
+ *
  * Please refer to LICENSE for copyright information
  *
  *              Orange: A hobby OS designed for studying OS development.

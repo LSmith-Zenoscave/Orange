@@ -1,3 +1,20 @@
+/* ===========================================================================
+ * Orange 0.1.0
+ *
+ * Please refer to LICENSE for copyright information
+ *
+ *              Orange: A hobby OS designed for studying OS development.
+ *
+ *              LibC: The Orange C Standard Library Implementation
+ *
+ *      File    : string.h
+ *      Purpose : C Standard Character-Strings
+ *
+ *      Notes   :
+ *      Author  : Luke Smith
+ * ===========================================================================
+ */
+
 #ifndef _STRING_H
 #define _STRING_H 1
 

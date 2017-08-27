@@ -1,3 +1,15 @@
+
+	# ==========================================================================
+	# Orange: 0.1.0
+	#
+	# Copyright (c) 2017 Luke Smith <lsmith@zenoscave.com>
+	#
+	# Please refer to LICENSE for copyright information
+	#
+	#      File    : gdt.S
+	#      Purpose : GDT Flush routine (calls lgdt).
+	# ==========================================================================
+
 .global gdt_flush
 
 gdt_flush:

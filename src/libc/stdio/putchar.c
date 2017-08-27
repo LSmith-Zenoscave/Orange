@@ -6,7 +6,7 @@
 
 int putchar(int ic)
 {
-#if defined(__is_os2_kernel)
+#if defined(__is_orange_kernel)
   char c = (char) ic;
 	terminal_write(&c, sizeof(c));
 #else

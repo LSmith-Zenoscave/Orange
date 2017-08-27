@@ -1,3 +1,15 @@
+
+	# ==========================================================================
+	# Orange: 0.1.0
+	#
+	# Copyright (c) 2017 Luke Smith <lsmith@zenoscave.com>
+	#
+	# Please refer to LICENSE for copyright information
+	#
+	#      File    : irq.s
+	#      Purpose : Interrupt Req macros and common definitions.
+	# ==========================================================================
+
 .section .text
 .align 4
 
