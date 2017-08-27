@@ -55,6 +55,24 @@ void initialize_terminal()
 
 /*
  * ---------------------------------------------------------------------------
+ *      Name   : terminal_clearscreen
+ *      Purpose: Clear the vga screen
+ *      Args   : void
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
+void terminal_clearscreen()
+{
+  terminal_row = 0;
+  terminal_column = 0;
+  for (size_t index = 0; index < VGA_HEIGHT * VGA_WIDTH; index++)
+  {
+    terminal_buffer[index] = make_vgaentry('\0', terminal_color);
+  }
+}
+
+/*
+ * ---------------------------------------------------------------------------
  *      Name   : terminal_setcolor
  *      Purpose: change terminal color
  *      Args   : uint8_t color

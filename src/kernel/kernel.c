@@ -1,13 +1,17 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#include <boot/multiboot.h>
 
 #include <io/tty.h>
 #include <cpu/gdt.h>
 #include <cpu/idt.h>
+#include <mem/paging.h>
 
-
-void kernel_early(void *mboot, unsigned int magic, unsigned int *ebp)
+void kernel_early(multiboot_t *mboot, unsigned int magic, unsigned int *ebp)
 {
   initialize_terminal();
   terminal_writestring("TTY   ... [\x1b[32mDONE\x1b[00m]\nGDT   ... ");
@@ -16,9 +20,21 @@ void kernel_early(void *mboot, unsigned int magic, unsigned int *ebp)
   initialize_idt();
   terminal_writestring("[\x1b[32mDONE\x1b[00m]\nIRQ   ... ");
   initialize_irq();
+  __asm__ __volatile__("sti");
+  register_isr_handler(8, double_fault);
+  terminal_writestring("[\x1b[32mDONE\x1b[00m]\nPAGE  ... ");
+  initialize_paging(mboot->mem_upper + mboot->mem_lower);
   terminal_writestring("[\x1b[32mDONE\x1b[00m]\n");
 }
 
 void main()
 {
+  terminal_clearscreen();
+  printf(
+         "______                               _____  _____ \n"
+         "|  _  \\                             |  _  |/  ___|\n"
+         "| | | |   ___     ___    _ __ ___   | | | |\\ `--. \n"
+         "| | | |  / _ \\   / _ \\  | '_ ` _ \\  | | | | `--. \\\n"
+         "| |/  | | (_) | | (_) | | | | | | | | \\_/ |/\\__/ /\n"
+         "|____/   \\___/   \\___/  |_| |_| |_|  \\___/ \\____/ \n");
 }
