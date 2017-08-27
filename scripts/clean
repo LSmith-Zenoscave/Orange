@@ -11,4 +11,4 @@
 #      Purpose : Orange cleanup utility script
 # ===========================================================================
 
-(cd .. && mkdir -p dists && mv orange-*.iso dists/)
+(cd .. && mkdir -p dists && if [ -e orange-*.iso ]; then mv orange-*.iso dists; fi)
