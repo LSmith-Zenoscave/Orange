@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# ===========================================================================
+# Orange: 0.1.0
+#
+# Copyright (c) 2017 Luke Smith <lsmith@zenoscave.com>
+#
+# Please refer to LICENSE for copyright information
+#
+#      File    : setup.sh
+#      Purpose : Orange cleanup utility script
+# ===========================================================================
+
+(cd .. && mkdir -p dists && mv orange-*.iso dists/)
