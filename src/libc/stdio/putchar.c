@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#if defined(__is_os2_kernel)
+#if defined(__is_orange_kernel)
 #include <io/tty.h>
 #endif
 
