@@ -1,18 +1,17 @@
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <boot/multiboot.h>
 
-#include <io/tty.h>
 #include <cpu/gdt.h>
 #include <cpu/idt.h>
+#include <io/tty.h>
 #include <mem/paging.h>
 
-void kernel_early(multiboot_t *mboot, unsigned int magic, unsigned int *ebp)
-{
+void kernel_early(multiboot_t *mboot, unsigned int magic, unsigned int *ebp) {
   initialize_terminal();
   terminal_writestring("TTY   ... [\x1b[32mDONE\x1b[00m]\nGDT   ... ");
   initialize_gdt();
@@ -27,14 +26,13 @@ void kernel_early(multiboot_t *mboot, unsigned int magic, unsigned int *ebp)
   terminal_writestring("[\x1b[32mDONE\x1b[00m]\n");
 }
 
-void main()
-{
+void main() {
   terminal_clearscreen();
   printf(
-         "______                               _____  _____ \n"
-         "|  _  \\                             |  _  |/  ___|\n"
-         "| | | |   ___     ___    _ __ ___   | | | |\\ `--. \n"
-         "| | | |  / _ \\   / _ \\  | '_ ` _ \\  | | | | `--. \\\n"
-         "| |/  | | (_) | | (_) | | | | | | | | \\_/ |/\\__/ /\n"
-         "|____/   \\___/   \\___/  |_| |_| |_|  \\___/ \\____/ \n");
+      "______                               _____  _____ \n"
+      "|  _  \\                             |  _  |/  ___|\n"
+      "| | | |   ___     ___    _ __ ___   | | | |\\ `--. \n"
+      "| | | |  / _ \\   / _ \\  | '_ ` _ \\  | | | | `--. \\\n"
+      "| |/  | | (_) | | (_) | | | | | | | | \\_/ |/\\__/ /\n"
+      "|____/   \\___/   \\___/  |_| |_| |_|  \\___/ \\____/ \n");
 }

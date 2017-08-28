@@ -1,3 +1,15 @@
+
+	# ==========================================================================
+	# Orange: 0.1.0
+	#
+	# Copyright (c) 2017 Luke Smith <lsmith@zenoscave.com>
+	#
+	# Please refer to LICENSE for copyright information
+	#
+	#      File    : rcrw.S
+	#      Purpose : Control Regs I/O.
+	# ==========================================================================
+
 .global read_cr0
 read_cr0:
 	mov %cr0, %eax
