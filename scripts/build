@@ -1,0 +1,58 @@
+#!/bin/sh
+
+# ===========================================================================
+# Orange: 0.1.0
+#
+# Copyright (c) 2017 Luke Smith <lsmith@zenoscave.com>
+#
+# Please refer to LICENSE for copyright information
+#
+#      File    : build
+#      Purpose : orange iso build script.
+# ===========================================================================
+
+if [ $# -lt 1 ]; then
+    echo "Please provide a build-type such as: Debug, Release, RelWithDebInfo, or MinSizeRel."
+    exit 1
+fi
+
+for type in $@; do
+    if [ ! -d "../build/${type}" ]; then
+        echo "Please provide a valid build type. ${type} is not valid."
+    else
+        echo "Building ${type}..."
+        (cd "../build/${type}" && rm -rf ./* && CC=clang cmake -DCMAKE_BUILD_TYPE=${type} ../.. && make)
+        echo "Built ${type}."
+
+        echo "Installing ${type}..."
+        (cd ../build/${type}/ \
+         && DESTDIR=../.. PREFIX="" make install \
+         && rm -rf ../../sysroot \
+         && mv ../../usr/local/sysroot ../.. \
+         && rm -rf ../../usr)
+        echo "Installed ${type} to sysroot."
+
+        echo "Making ${type} ISO..."
+        rm -rf ../isodir
+        mkdir -p ../isodir/boot/grub
+        cp eltorito.bin ../isodir/boot/grub
+        cp ../build/${type}/orange ../isodir/boot/orange
+	cp -r ../sysroot/* ../isodir
+        cat << EOF > ../isodir/boot/grub/grub.cfg
+menuentry "OS-orange" {
+    multiboot /boot/orange
+}
+EOF
+        mkisofs -R \
+        -b boot/grub/eltorito.bin \
+        -no-emul-boot \
+        -boot-load-size 4\
+        -boot-info-table \
+        -o ../orange-${type}.iso ../isodir
+        echo "orange-${type}.iso written."
+	echo "Cleaning up..."
+        rm -rf  ../isodir ../sysroot
+	echo "Done!"
+    fi
+done
+

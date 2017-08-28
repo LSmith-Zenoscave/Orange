@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# ===========================================================================
+# Orange: 0.1.0
+#
+# Copyright (c) 2017 Luke Smith <lsmith@zenoscave.com>
+#
+# Please refer to LICENSE for copyright information
+#
+#      File    : setup
+#      Purpose : Orange directory setup script -- removes old binaries.
+# ===========================================================================
+
+echo "Cleaning old setup..."
+
+rm -rf ../build
+(cd .. && mkdir -p build/Debug build/Release build/MinSizeRel build/RelWithDebInfo)
+
+echo "Done!"
+
