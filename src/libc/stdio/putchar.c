@@ -30,13 +30,12 @@
  *      Returns: int
  * ---------------------------------------------------------------------------
  */
-int putchar(int ic)
-{
+int putchar(int ic) {
 #if defined(__is_orange_kernel)
-  char c = (char) ic;
-	terminal_write(&c, sizeof(c));
+  char c = (char)ic;
+  terminal_write(&c, sizeof(c));
 #else
-  // TODO: implement a write system call.
+// TODO: implement a write system call.
 #endif
   return ic;
 }

@@ -24,8 +24,7 @@
 
 #include <stddef.h>
 
-typedef struct gdt_entry_struct
-{
+typedef struct gdt_entry_struct {
   unsigned short limit_low;
   unsigned short base_low;
   unsigned char base_middle;
@@ -34,15 +33,13 @@ typedef struct gdt_entry_struct
   unsigned char base_high;
 } __attribute__((packed)) gdt_entry_t;
 
-typedef struct gdt_source_struct
-{
+typedef struct gdt_source_struct {
   unsigned int *base;
   unsigned int limit;
   unsigned char type;
-}__attribute((packed)) gdt_t;
+} __attribute((packed)) gdt_t;
 
-typedef struct gdt_ptr_struct
-{
+typedef struct gdt_ptr_struct {
   unsigned short limit;
   unsigned int *base;
 } __attribute__((packed)) gdt_ptr_t;

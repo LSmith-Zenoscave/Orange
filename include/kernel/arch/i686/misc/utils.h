@@ -37,6 +37,4 @@ unsigned short inw(unsigned short port);
 unsigned int inl(unsigned short port);
 
 void io_wait();
-
-unsigned char one_count(unsigned int value);
 #endif

@@ -30,14 +30,12 @@
  *      Returns: void *
  * ---------------------------------------------------------------------------
  */
-void *memset(void *buffer, int value, size_t size)
-{
-  if(size)
-  {
+void *memset(void *buffer, int value, size_t size) {
+  if (size) {
     char *d = buffer;
     do {
       *d++ = value;
-    } while(--size);
+    } while (--size);
   }
   return buffer;
 }

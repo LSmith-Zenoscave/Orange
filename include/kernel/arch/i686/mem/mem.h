@@ -29,5 +29,4 @@ void *kmalloc_ap(size_t size, void **physical);
 void kfree(void *p);
 void *map_to_physical(void *);
 
-
 #endif

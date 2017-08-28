@@ -15,12 +15,11 @@
  * ===========================================================================
  */
 
-#include <stdbool.h>
 #include <stdarg.h>
-#include <stdio.h>
+#include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
-
 
 /*
  * ---------------------------------------------------------------------------
@@ -34,12 +33,10 @@
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
-static void print(const char* data, size_t data_length)
-{
-  for ( size_t i = 0; i < data_length; i++ )
-    putchar((int) ((const unsigned char*) data)[i]);
+static void print(const char *data, size_t data_length) {
+  for (size_t i = 0; i < data_length; i++)
+    putchar((int)((const unsigned char *)data)[i]);
 }
-
 
 /*
  * ---------------------------------------------------------------------------
@@ -58,15 +55,14 @@ static void printi(const int data) {
   char *p = &str[sizeof(str) - 1];
   *p = '\0';
   val = tmp / 10;
-  *--p = ('0' + (char) (tmp - val * 10));
+  *--p = ('0' + (char)(tmp - val * 10));
   tmp = val;
-  while(tmp != 0)
-  {
+  while (tmp != 0) {
     val = tmp / 10;
-    *--p = ('0' + (char) (tmp - val * 10));
+    *--p = ('0' + (char)(tmp - val * 10));
     tmp = val;
   }
-  if(!strlen(p)) *--p = '0';
+  if (!strlen(p)) *--p = '0';
   print(p, strlen(p));
 }
 
@@ -89,17 +85,16 @@ static void printx(const unsigned int data) {
   *p = '\0';
   val = tmp / 16;
   tmp2 = tmp - val * 16;
-  *--p = (tmp2 >= 0xa) ? (char) ('a' + tmp2 - 0xa) : (char) ('0' + tmp2);
+  *--p = (tmp2 >= 0xa) ? (char)('a' + tmp2 - 0xa) : (char)('0' + tmp2);
   tmp = val;
-  while(tmp != 0)
-  {
+  while (tmp != 0) {
     val = tmp / 16;
     tmp2 = tmp - val * 16;
-    *--p = (tmp2 >= 0xa) ? (char) ('a' + tmp2 - 0xa) : (char) ('0' + tmp2);
+    *--p = (tmp2 >= 0xa) ? (char)('a' + tmp2 - 0xa) : (char)('0' + tmp2);
     tmp = val;
   }
 
-  if(!strlen(p)) *--p = '0';
+  if (!strlen(p)) *--p = '0';
 
   print(p, strlen(p));
 }
@@ -116,8 +111,7 @@ static void printx(const unsigned int data) {
  *      Returns: int
  * ---------------------------------------------------------------------------
  */
-int printf(const char* restrict format, ...)
-{
+int printf(const char *restrict format, ...) {
   va_list parameters;
   va_start(parameters, format);
 
@@ -125,59 +119,45 @@ int printf(const char* restrict format, ...)
   size_t amount;
   bool rejected_bad_specifier = false;
 
-  while ( *format != '\0' )
-  {
-    if ( *format != '%' )
-    {
-      print_c:
+  while (*format != '\0') {
+    if (*format != '%') {
+    print_c:
       amount = 1;
-      while ( format[amount] && format[amount] != '%' )
-        amount++;
+      while (format[amount] && format[amount] != '%') amount++;
       print(format, amount);
       format += amount;
       written += amount;
       continue;
     }
 
-    const char* format_begun_at = format;
+    const char *format_begun_at = format;
 
-    if ( *(++format) == '%' )
-      goto print_c;
+    if (*(++format) == '%') goto print_c;
 
-    if ( rejected_bad_specifier )
-    {
-      incomprehensible_conversion:
+    if (rejected_bad_specifier) {
+    incomprehensible_conversion:
       rejected_bad_specifier = true;
       format = format_begun_at;
       goto print_c;
     }
 
-    if ( *format == 'c' )
-    {
+    if (*format == 'c') {
       format++;
-      char c = (char) va_arg(parameters, int /* char promotes to int */);
+      char c = (char)va_arg(parameters, int /* char promotes to int */);
       print(&c, 1);
-    }
-    else if ( *format == 's' )
-    {
+    } else if (*format == 's') {
       format++;
-      const char* s = va_arg(parameters, const char*);
+      const char *s = va_arg(parameters, const char *);
       print(s, strlen(s));
-    }
-    else if ( *format == 'd' )
-    {
+    } else if (*format == 'd') {
       format++;
-      int d = (int) va_arg(parameters, int);
+      int d = (int)va_arg(parameters, int);
       printi(d);
-    }
-    else if ( *format == 'x' )
-    {
+    } else if (*format == 'x') {
       format++;
-      int d = (int) va_arg(parameters, int);
+      int d = (int)va_arg(parameters, int);
       printx(d);
-    }
-    else
-    {
+    } else {
       goto incomprehensible_conversion;
     }
   }

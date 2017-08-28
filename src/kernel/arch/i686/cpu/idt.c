@@ -15,13 +15,13 @@
  * ===========================================================================
  */
 
-#include <stdint.h>
-#include <string.h>
 #include <cpu/idt.h>
 #include <cpu/isr.h>
-#include <misc/utils.h>
 #include <io/tty.h>
 #include <misc/panic.h>
+#include <misc/utils.h>
+#include <stdint.h>
+#include <string.h>
 
 extern void _isr0();
 extern void _isr1();
@@ -87,8 +87,7 @@ idt_ptr_t idt_ptr;
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
-void *double_fault(registers_t *regs)
-{
+void *double_fault(registers_t *regs) {
   unsigned int err_code = regs->err_code;
   terminal_writestring("Double Fault! Error-Code: 0x");
   terminal_writehex(err_code);
@@ -105,45 +104,44 @@ void *double_fault(registers_t *regs)
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
-void initialize_idt()
-{
+void initialize_idt() {
   idt_ptr.limit = (256 * sizeof(idt_entry_t)) - 1;
-  idt_ptr.base = (unsigned int *) &idt;
+  idt_ptr.base = (unsigned int *)&idt;
   memset((void *)idt_ptr.base, 0, 256 * sizeof(idt_entry_t));
 
   fill_idt_entry(0, 8, _isr0, 0xe, 0);
-	fill_idt_entry(1, 8, _isr1, 0xe, 0);
-	fill_idt_entry(2, 8, _isr2, 0xe, 0);
-	fill_idt_entry(3, 8, _isr3, 0xe, 0);
-	fill_idt_entry(4, 8, _isr4, 0xe, 0);
-	fill_idt_entry(5, 8, _isr5, 0xe, 0);
-	fill_idt_entry(6, 8, _isr6, 0xe, 0);
-	fill_idt_entry(7, 8, _isr7, 0xe, 0);
-	fill_idt_entry(8, 8, _isr8, 0xe, 0);
-	fill_idt_entry(9, 8, _isr9, 0xe, 0);
-	fill_idt_entry(10, 8, _isr10, 0xe, 0);
-	fill_idt_entry(11, 8, _isr11, 0xe, 0);
-	fill_idt_entry(12, 8, _isr12, 0xe, 0);
-	fill_idt_entry(13, 8, _isr13, 0xe, 0);
-	fill_idt_entry(14, 8, _isr14, 0xe, 0);
-	fill_idt_entry(15, 8, _isr15, 0xe, 0);
-	fill_idt_entry(16, 8, _isr16, 0xe, 0);
-	fill_idt_entry(17, 8, _isr17, 0xe, 0);
-	fill_idt_entry(18, 8, _isr18, 0xe, 0);
-	fill_idt_entry(19, 8, _isr19, 0xe, 0);
-	fill_idt_entry(20, 8, _isr20, 0xe, 0);
-	fill_idt_entry(21, 8, _isr21, 0xe, 0);
-	fill_idt_entry(22, 8, _isr22, 0xe, 0);
-	fill_idt_entry(23, 8, _isr23, 0xe, 0);
-	fill_idt_entry(24, 8, _isr24, 0xe, 0);
-	fill_idt_entry(25, 8, _isr25, 0xe, 0);
-	fill_idt_entry(26, 8, _isr26, 0xe, 0);
-	fill_idt_entry(27, 8, _isr27, 0xe, 0);
-	fill_idt_entry(28, 8, _isr28, 0xe, 0);
-	fill_idt_entry(29, 8, _isr29, 0xe, 0);
-	fill_idt_entry(30, 8, _isr30, 0xe, 0);
-	fill_idt_entry(31, 8, _isr31, 0xe, 0);
-	fill_idt_entry(127, 8, _isr127, 0xe, 0);
+  fill_idt_entry(1, 8, _isr1, 0xe, 0);
+  fill_idt_entry(2, 8, _isr2, 0xe, 0);
+  fill_idt_entry(3, 8, _isr3, 0xe, 0);
+  fill_idt_entry(4, 8, _isr4, 0xe, 0);
+  fill_idt_entry(5, 8, _isr5, 0xe, 0);
+  fill_idt_entry(6, 8, _isr6, 0xe, 0);
+  fill_idt_entry(7, 8, _isr7, 0xe, 0);
+  fill_idt_entry(8, 8, _isr8, 0xe, 0);
+  fill_idt_entry(9, 8, _isr9, 0xe, 0);
+  fill_idt_entry(10, 8, _isr10, 0xe, 0);
+  fill_idt_entry(11, 8, _isr11, 0xe, 0);
+  fill_idt_entry(12, 8, _isr12, 0xe, 0);
+  fill_idt_entry(13, 8, _isr13, 0xe, 0);
+  fill_idt_entry(14, 8, _isr14, 0xe, 0);
+  fill_idt_entry(15, 8, _isr15, 0xe, 0);
+  fill_idt_entry(16, 8, _isr16, 0xe, 0);
+  fill_idt_entry(17, 8, _isr17, 0xe, 0);
+  fill_idt_entry(18, 8, _isr18, 0xe, 0);
+  fill_idt_entry(19, 8, _isr19, 0xe, 0);
+  fill_idt_entry(20, 8, _isr20, 0xe, 0);
+  fill_idt_entry(21, 8, _isr21, 0xe, 0);
+  fill_idt_entry(22, 8, _isr22, 0xe, 0);
+  fill_idt_entry(23, 8, _isr23, 0xe, 0);
+  fill_idt_entry(24, 8, _isr24, 0xe, 0);
+  fill_idt_entry(25, 8, _isr25, 0xe, 0);
+  fill_idt_entry(26, 8, _isr26, 0xe, 0);
+  fill_idt_entry(27, 8, _isr27, 0xe, 0);
+  fill_idt_entry(28, 8, _isr28, 0xe, 0);
+  fill_idt_entry(29, 8, _isr29, 0xe, 0);
+  fill_idt_entry(30, 8, _isr30, 0xe, 0);
+  fill_idt_entry(31, 8, _isr31, 0xe, 0);
+  fill_idt_entry(127, 8, _isr127, 0xe, 0);
 
   idt_flush(&idt_ptr);
 }
@@ -156,30 +154,28 @@ void initialize_idt()
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
-void initialize_irq()
-{
+void initialize_irq() {
   pic_remap(0x20, 0x28);
-	fill_idt_entry(32, 8, _irq0, 0xe, 0);
-	fill_idt_entry(33, 8, _irq1, 0xe, 0);
-	fill_idt_entry(34, 8, _irq2, 0xe, 0);
-	fill_idt_entry(35, 8, _irq3, 0xe, 0);
-	fill_idt_entry(36, 8, _irq4, 0xe, 0);
-	fill_idt_entry(37, 8, _irq5, 0xe, 0);
-	fill_idt_entry(38, 8, _irq6, 0xe, 0);
-	fill_idt_entry(39, 8, _irq7, 0xe, 0);
-	fill_idt_entry(40, 8, _irq8, 0xe, 0);
-	fill_idt_entry(41, 8, _irq9, 0xe, 0);
-	fill_idt_entry(42, 8, _irq10, 0xe, 0);
-	fill_idt_entry(43, 8, _irq11, 0xe, 0);
-	fill_idt_entry(44, 8, _irq12, 0xe, 0);
-	fill_idt_entry(45, 8, _irq13, 0xe, 0);
-	fill_idt_entry(46, 8, _irq14, 0xe, 0);
-	fill_idt_entry(47, 8, _irq15, 0xe, 0);
+  fill_idt_entry(32, 8, _irq0, 0xe, 0);
+  fill_idt_entry(33, 8, _irq1, 0xe, 0);
+  fill_idt_entry(34, 8, _irq2, 0xe, 0);
+  fill_idt_entry(35, 8, _irq3, 0xe, 0);
+  fill_idt_entry(36, 8, _irq4, 0xe, 0);
+  fill_idt_entry(37, 8, _irq5, 0xe, 0);
+  fill_idt_entry(38, 8, _irq6, 0xe, 0);
+  fill_idt_entry(39, 8, _irq7, 0xe, 0);
+  fill_idt_entry(40, 8, _irq8, 0xe, 0);
+  fill_idt_entry(41, 8, _irq9, 0xe, 0);
+  fill_idt_entry(42, 8, _irq10, 0xe, 0);
+  fill_idt_entry(43, 8, _irq11, 0xe, 0);
+  fill_idt_entry(44, 8, _irq12, 0xe, 0);
+  fill_idt_entry(45, 8, _irq13, 0xe, 0);
+  fill_idt_entry(46, 8, _irq14, 0xe, 0);
+  fill_idt_entry(47, 8, _irq15, 0xe, 0);
 
-  for(int i = 0; i < 256; i++)
-  {
-    register_irq_handler((unsigned char) i, default_irq_handler);
-    register_isr_handler((unsigned char) i, default_fault_handler);
+  for (int i = 0; i < 256; i++) {
+    register_irq_handler((unsigned char)i, default_irq_handler);
+    register_isr_handler((unsigned char)i, default_fault_handler);
   }
 }
 
@@ -201,10 +197,11 @@ void initialize_irq()
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
-static void fill_idt_entry(int entry, unsigned short selector, void *offset, unsigned char gate, unsigned char priv)
-{
+static void fill_idt_entry(int entry, unsigned short selector, void *offset,
+                           unsigned char gate, unsigned char priv) {
   idt[entry].base_low = (unsigned short)((unsigned int)offset & 0xFFFF);
-  idt[entry].base_high = (unsigned short)(((unsigned int)offset >> 16) & 0xFFFF);
+  idt[entry].base_high =
+      (unsigned short)(((unsigned int)offset >> 16) & 0xFFFF);
 
   idt[entry].selector = selector;
   idt[entry].zero = 0;
@@ -224,16 +221,15 @@ static void fill_idt_entry(int entry, unsigned short selector, void *offset, uns
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
-void pic_remap(unsigned char offset_from, unsigned char offset_to)
-{
+void pic_remap(unsigned char offset_from, unsigned char offset_to) {
   unsigned char mask1, mask2;
 
   mask1 = inb(PIC1_DATA);
   mask2 = inb(PIC2_DATA);
 
-  outb(PIC1_COMMAND, ICW1_INIT+ICW1_ICW4);
+  outb(PIC1_COMMAND, ICW1_INIT + ICW1_ICW4);
   io_wait();
-  outb(PIC2_COMMAND, ICW1_INIT+ICW1_ICW4);
+  outb(PIC2_COMMAND, ICW1_INIT + ICW1_ICW4);
   io_wait();
   outb(PIC1_DATA, offset_from);
   io_wait();

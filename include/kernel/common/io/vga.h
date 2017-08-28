@@ -20,8 +20,7 @@
 
 #include <stdint.h>
 
-enum vga_color
-{
+enum vga_color {
   COLOR_BLACK = 0,
   COLOR_BLUE = 1,
   COLOR_GREEN = 2,
@@ -40,13 +39,11 @@ enum vga_color
   COLOR_WHITE = 15,
 };
 
-static inline unsigned char make_color(enum vga_color fg, enum vga_color bg)
-{
+static inline unsigned char make_color(enum vga_color fg, enum vga_color bg) {
   return fg | bg << 4;
 }
 
-static inline unsigned short make_vgaentry(char c, unsigned char color)
-{
+static inline unsigned short make_vgaentry(char c, unsigned char color) {
   unsigned short c16 = c;
   unsigned short color16 = color;
   return c16 | color16 << 8;
@@ -55,6 +52,6 @@ static inline unsigned short make_vgaentry(char c, unsigned char color)
 static const int VGA_WIDTH = 80;
 static const int VGA_HEIGHT = 25;
 
-static unsigned short* const VGA_MEMORY = (unsigned short*) 0xB8000;
+static unsigned short *const VGA_MEMORY = (unsigned short *)0xB8000;
 
 #endif
