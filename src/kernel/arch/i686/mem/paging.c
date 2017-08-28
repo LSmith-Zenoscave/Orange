@@ -1,3 +1,20 @@
+/* ===========================================================================
+ * Orange 0.1.0
+ *
+ * Please refer to LICENSE for copyright information
+ *
+ *              Orange: A hobby OS designed for studying OS development.
+ *
+ *              Kernel: The main kernel
+ *
+ *      File    : paging.c
+ *      Purpose : kernel virtual memory paging
+ *
+ *      Notes   :
+ *      Author  : Luke Smith
+ * ===========================================================================
+ */
+
 #include <assert.h>
 #include <io/tty.h>
 #include <mem/alloc.h>
@@ -21,6 +38,16 @@ extern heap_t *kernel_heap;
 #define INDEX_FROM_BIT(bit) ((bit) / 0x20)
 #define OFFSET_FROM_BIT(bit) ((bit) % 0x20)
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : set_frame
+ *      Purpose: mark a frame as active in the directory
+ *      Args ---
+ *        addr: unsigned int
+ *          - frame address to mark
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
 static void set_frame(unsigned int addr) {
   if (addr < frames_no * 0x1000) {
     unsigned int frame = addr / 0x1000;
@@ -30,6 +57,16 @@ static void set_frame(unsigned int addr) {
   }
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : clear_frame
+ *      Purpose: mark a frame as inactive in the directory
+ *      Args ---
+ *        addr: unsigned int
+ *          - frame address to mark
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
 static void clear_frame(unsigned int addr) {
   unsigned int frame = addr / 0x1000;
   unsigned int idx = INDEX_FROM_BIT(frame);
@@ -37,6 +74,16 @@ static void clear_frame(unsigned int addr) {
   frames[idx] &= ~(0x1 << off);
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : test_frame
+ *      Purpose: test a frame for activity in the directory
+ *      Args ---
+ *        addr: unsigned int
+ *          - frame address to test
+ *      Returns: unsigned int
+ * ---------------------------------------------------------------------------
+ */
 static unsigned int test_frame(unsigned int addr) {
   unsigned int frame = addr / 0x1000;
   unsigned int idx = INDEX_FROM_BIT(frame);
@@ -59,8 +106,22 @@ static unsigned int first_frame() {
   return 0xFFFFFFFF;
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : alloc_frame
+ *      Purpose: add a frame to the page
+ *      Args ---
+ *        page: page_entry_t *
+ *          - base page to add the frame to
+ *        is_kernel: unsigned char
+ *          - kernel ownership flag
+ *        is_writable: unsigned char
+ *          - read-write flag
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
 void alloc_frame(page_entry_t *page, unsigned char is_kernel,
-                 unsigned char is_writeable) {
+                 unsigned char is_writable) {
   if (page->frame == 0) {
     unsigned int frame = first_frame();
     if (frame == 0xFFFFFFFF) {
@@ -73,20 +134,46 @@ void alloc_frame(page_entry_t *page, unsigned char is_kernel,
   }
 
   page->present = 1;
-  page->rw = (is_writeable) ? 1 : 0;
+  page->rw = (is_writable) ? 1 : 0;
   page->user = (is_kernel) ? 0 : 1;
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : adirect_frame
+ *      Purpose: add a frame to the page directly
+ *      Args ---
+ *        page: page_entry_t *
+ *          - base page to add the frame to
+ *        is_kernel: unsigned char
+ *          - kernel ownership flag
+ *        is_writable: unsigned char
+ *          - read-write flag
+ *        addr: void *
+ *          - memory frame address
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
 void direct_frame(page_entry_t *page, unsigned char is_kernel,
-                  unsigned int is_writeable, void *addr) {
+                  unsigned int is_writable, void *addr) {
   page->present = 1;
-  page->rw = (is_writeable) ? 1 : 0;
+  page->rw = (is_writable) ? 1 : 0;
   page->user = (is_kernel) ? 0 : 1;
   page->frame = (unsigned int)addr / 0x1000;
 
   set_frame((unsigned int)addr);
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : free_frame
+ *      Purpose: remove a frame from the page directly
+ *      Args ---
+ *        page: page_entry_t *
+ *          - base page to remove
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
 void free_frame(page_entry_t *page) {
   if (page->frame != 0) {
     clear_frame(page->frame);
@@ -94,6 +181,16 @@ void free_frame(page_entry_t *page) {
   }
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : initialize_paging
+ *      Purpose: create kernel paging layout and start handlers
+ *      Args ---
+ *        memsze: unsigned int
+ *          - available memory
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
 void initialize_paging(unsigned int memsize) {
   frames_no = memsize / 4;
   frames =
@@ -145,12 +242,36 @@ void initialize_paging(unsigned int memsize) {
   switch_page_directory(kernel_directory);
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : switch_page_directory
+ *      Purpose: switch current page directory
+ *      Args ---
+ *        directory: page_directory_t *
+ *          - new directory to use
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
 void switch_page_directory(page_directory_t *directory) {
   write_cr3(&directory->tables_physical);
   write_cr4(read_cr4() | 0x00000010);  // set PSE;
   write_cr0(read_cr0() | 0xB0000000);  // set PG;
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : get_page
+ *      Purpose: get or create a page in a directory
+ *      Args ---
+ *        address: unsigned int *
+ *          - address to retrieve
+ *        make: unsigned char
+ *          - Creation on missing flag
+ *        directory: page_directory_t *
+ *          - directory to search
+ *      Returns: void
+ * ---------------------------------------------------------------------------
+ */
 page_entry_t *get_page(const unsigned int *address, unsigned char make,
                        page_directory_t *directory) {
   unsigned int frame = (unsigned int)address / 0x1000;
@@ -171,6 +292,16 @@ page_entry_t *get_page(const unsigned int *address, unsigned char make,
   return NULL;
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : general_protection_fault
+ *      Purpose: Protection fault handler
+ *      Args ---
+ *        registers: registers_t *
+ *          - register states at time of the call
+ *      Returns: void *
+ * ---------------------------------------------------------------------------
+ */
 void *general_protection_fault(registers_t *registers) {
   terminal_writestring("Protection fault");
   if (registers->err_code) {
@@ -197,6 +328,16 @@ void *general_protection_fault(registers_t *registers) {
   return NULL;
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ *      Name   : page_fault
+ *      Purpose: Page fault handler
+ *      Args ---
+ *        registers: registers_t *
+ *          - register states at time of the call
+ *      Returns: void *
+ * ---------------------------------------------------------------------------
+ */
 void *page_fault(registers_t *regs) {
   unsigned int err_code = regs->err_code;
   bool present = !(err_code & 0x1);  // Page not present

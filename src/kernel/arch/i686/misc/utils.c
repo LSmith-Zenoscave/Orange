@@ -14,6 +14,7 @@
  *      Author  : Luke Smith
  * ===========================================================================
  */
+
 #include <misc/utils.h>
 #include <stddef.h>
 #include <stdint.h>
