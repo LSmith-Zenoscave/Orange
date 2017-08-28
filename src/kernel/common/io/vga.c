@@ -37,7 +37,7 @@ unsigned char terminal_escape_sequence(const char *es);
  * ---------------------------------------------------------------------------
  *      Name   : initialize_terminal
  *      Purpose: setup basic global variables and environment conditions
- *      Args   : void
+ *      Args --- void
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -57,7 +57,7 @@ void initialize_terminal()
  * ---------------------------------------------------------------------------
  *      Name   : terminal_clearscreen
  *      Purpose: Clear the vga screen
- *      Args   : void
+ *      Args --- void
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -75,7 +75,9 @@ void terminal_clearscreen()
  * ---------------------------------------------------------------------------
  *      Name   : terminal_setcolor
  *      Purpose: change terminal color
- *      Args   : uint8_t color
+ *      Args ---
+ *        color: uint8_t
+ *          - Terminal color code to set
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -89,10 +91,15 @@ void terminal_setcolor(uint8_t color)
  *      Name   : terminal_putentryat
  *      Purpose: insert a character and color into the buffer at the given
  *               offset (x and y)
- *      Args   : char c,
- *               uint8_t color,
- *               size_t x,
- *               size_t y
+ *      Args ---
+ *        c: char
+ *          - Character to place
+ *        color: unsigned int
+ *          - color to use
+ *        x: size_t
+ *          - x coordinate
+ *        y: size_t
+ *          - y coordinate
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -107,7 +114,9 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
  * ---------------------------------------------------------------------------
  *      Name   : terminal_putchar
  *      Purpose: insert a char into buffer and move position
- *      Args   : char c
+ *      Args ---
+ *        c: char
+ *          - character to place
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -128,8 +137,11 @@ void terminal_putchar(char c)
  * ---------------------------------------------------------------------------
  *      Name   : terminal_write
  *      Purpose: Write a string to the buffer.
- *      Args   : const char* data,
- *               size_t size
+ *      Args ---
+ *        data: const char *
+ *          - character string to write
+ *        size: size_t
+ *          - length of data
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -171,7 +183,9 @@ void terminal_write(const char* data, size_t size)
  * ---------------------------------------------------------------------------
  *      Name   : terminal_writestring
  *      Purpose: terminal_write() wrapper
- *      Args   : const char *data
+ *      Args ---
+ *        data: const char *
+ *          - character string to write
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -185,7 +199,9 @@ void terminal_writestring(const char* data)
  *      Name   : terminal_writehex
  *      Purpose: write an unsinged integer in hex of up to 32 bits without 
  *               leading zeroes
- *      Args   : const uint32_t data
+ *      Args ---
+ *        data: const unsigned int
+ *          - value to write in hex
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -218,7 +234,7 @@ void terminal_writehex(const unsigned int data)
  * ---------------------------------------------------------------------------
  *      Name   : terminal_scroll
  *      Purpose: scroll the buffer up one whole line
- *      Args   : 
+ *      Args --- void
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
@@ -237,37 +253,43 @@ void terminal_scroll()
  * ---------------------------------------------------------------------------
  *      Name   : terminal_foreground
  *      Purpose: set the terminal foreground while keeping the background
- *      Args   : enum vga_color fg
+ *      Args ---
+ *        fg: enum vga_color
+ *          - foreground color
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
 void terminal_foreground(enum vga_color fg)
 {
-    terminal_color = terminal_color & 0xf0 | fg;
+  terminal_color = terminal_color & 0xf0 | fg & 0x0f;
 }
 
 /*
  * ---------------------------------------------------------------------------
  *      Name   : terminal_background
  *      Purpose: set the terminal background while keeping the foreground
- *      Args   : enum vga_color bg
+ *      Args ---
+ *        gg: enum vga_color
+ *          - background color
  *      Returns: void
  * ---------------------------------------------------------------------------
  */
 void terminal_background(enum vga_color bg)
 {
-    terminal_color = terminal_color & 0xf | (bg << 4);
+    terminal_color = terminal_color & 0x0f | (bg << 4);
 }
 
 /*
  * ---------------------------------------------------------------------------
  *      Name   : terminal_escape_sequence
  *      Purpose: edit terminal_vars based on an escape sequence.
- *      Args   : const char *es
- *      Returns: void
+ *      Args ---
+ *        es: const char *
+ *          - the given escape sequence
+ *      Returns: unsigned char
  * ---------------------------------------------------------------------------
  */
-uint8_t terminal_escape_sequence(const char *es)
+unsigned char terminal_escape_sequence(const char *es)
 {
     const char *es2 = es + 1;
     if(*es2 == '\x1b') {
