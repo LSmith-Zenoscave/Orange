@@ -96,7 +96,7 @@ static void printx(const unsigned int data) {
 
   if (!strlen(p)) *--p = '0';
 
-  print(p, strlen(p));
+  print(p, strlen(p)-1);
 }
 
 /*
@@ -148,7 +148,7 @@ int printf(const char *restrict format, ...) {
     } else if (*format == 's') {
       format++;
       const char *s = va_arg(parameters, const char *);
-      print(s, strlen(s));
+      print(s, strlen(s)-1);
     } else if (*format == 'd') {
       format++;
       int d = (int)va_arg(parameters, int);

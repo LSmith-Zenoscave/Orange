@@ -21,12 +21,11 @@ for type in $@; do
         echo "Please provide a valid build type. ${type} is not valid."
     else
         echo "Building ${type}..."
-        (cd "../build/${type}" && rm -rf ./* && CC=clang cmake -DCMAKE_BUILD_TYPE=${type} ../.. && make)
+        (cd "../build/${type}" && rm -rf ./* && cmake -DCMAKE_BUILD_TYPE=${type} ../.. && make)
         echo "Built ${type}."
 
         echo "Installing ${type}..."
         (cd ../build/${type}/ \
-         && DESTDIR=../.. PREFIX="" make install \
          && rm -rf ../../sysroot \
          && mv ../../usr/local/sysroot ../.. \
          && rm -rf ../../usr)

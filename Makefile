@@ -1,7 +1,9 @@
 .PHONY: all clean
 
-all:
-	cd scripts; ./setup; ./build Release
+BUILD_VERSION ?= Release
 
-clean:
-	cd scripts; ./clean;
+all:
+	cd scripts; ./setup; ./build ${BUILD_VERSION}
+
+install:
+	cd scripts; ./install;

@@ -19,14 +19,16 @@ void kernel_early(multiboot_t *mboot, unsigned int magic, unsigned int *ebp) {
   initialize_idt();
   terminal_writestring("[\x1b[32mDONE\x1b[00m]\nIRQ   ... ");
   initialize_irq();
-  __asm__ __volatile__("sti");
   register_isr_handler(8, double_fault);
+  __asm__ __volatile__("sti");
   terminal_writestring("[\x1b[32mDONE\x1b[00m]\nPAGE  ... ");
   initialize_paging(mboot->mem_upper + mboot->mem_lower);
-  terminal_writestring("[\x1b[32mDONE\x1b[00m]\n");
+  terminal_writestring("[\x1b[32mDONE\x1b[00m]\n0x");
+  terminal_writehex(magic);
+  terminal_writehex(*ebp);
 }
 
-void main() {
+void main(void) {
   terminal_clearscreen();
   printf(
       "______                               _____  _____ \n"

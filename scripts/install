@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# ===========================================================================
+# Orange: 0.1.0
+#
+# Copyright (c) 2017 Luke Smith <lsmith@zenoscave.com>
+#
+# Please refer to LICENSE for copyright information
+#
+#      File    : install
+#      Purpose : Orange installer utility script
+# ===========================================================================
+
+cd .. && \
+mkdir -p dists && \
+for build in Release Debug MinSizeRel RelWithDebugInfo ; do
+    if [ -e orange-${build}.iso ] ; then
+        mv orange-${build}.iso dists;
+    fi
+done && \
+cd scripts
